@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-  
-    
+
+
 <body>
 
 <canvas id="myCanvas" ></canvas>
@@ -19,50 +19,52 @@ function Point(x, y) {
 const NUM_OF_VERTEXES = 7;
 const GAP_BETWEEN_VERTEXES = 80;
 const VERTEXES_SIZE = 40;
-var vertexArray = [];  
+var vertexArray = [];
+var edgeArray = new Array(NUM_OF_VERTEXES);
 
 function start() {
     canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - 40;
-    vertexArray = []; 
-    
+    vertexArray = [];
+
     var i;
-    for (i = 0; i < NUM_OF_VERTEXES; i++) { 
+    for (i = 0; i < NUM_OF_VERTEXES; i++) {
         var candidatePoint;
         do {
         candidatePoint = new Point(
             Math.max(VERTEXES_SIZE,(Math.random() * canvas.width) - VERTEXES_SIZE)
             ,Math.max(VERTEXES_SIZE,(Math.random() * canvas.height) -VERTEXES_SIZE));
-            
+
         }
         while (!isPointNotInRadiusOfOtherPoints(vertexArray,candidatePoint));
         vertexArray.push(candidatePoint)
-        console.log(vertexArray);
+        edgeArray[i] = [(i +1) % 7];
     }
+    console.log(edgeArray);
     drawAllVertexes(vertexArray)
 }
-    
+
 function isPointNotInRadiusOfOtherPoints(arrayOfPoints,point) {
     var i;
-    for (i = 0; i < arrayOfPoints.length; i++) { 
-        
+    for (i = 0; i < arrayOfPoints.length; i++) {
+
         var iterationPoint = arrayOfPoints[i];
-        
+
         if (Math.abs(iterationPoint.x - point.x) < GAP_BETWEEN_VERTEXES ||
             Math.abs(iterationPoint.y - point.Y) < GAP_BETWEEN_VERTEXES){
-            return false;    
+            return false;
         }
     }
     return true;
 }
 function drawAllVertexes(arrayOfPoints) {
     var i;
-    for (i = 0; i < arrayOfPoints.length; i++) { 
+    for (i = 0; i < arrayOfPoints.length; i++) {
         drawVertex(arrayOfPoints[i].x,arrayOfPoints[i].y,i);
     }
 }
-    
+
 function drawVertex(x,y,text) {
     var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
@@ -71,23 +73,23 @@ function drawVertex(x,y,text) {
     ctx.arc(x,y,VERTEXES_SIZE,0,2*Math.PI);
     ctx.fill();
 
-    ctx.fillStyle = 'black'; 
+    ctx.fillStyle = 'black';
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = '16px serif';
     ctx.fillText(text, x,y);
 }
-    
-    
+
+
 start();
-    
-    
-</script> 
+
+
+</script>
 
 </html>
 
-//add to git
-//add vetexes array
+
+//
 //add arrows. after adding - make sure that they are not crossing each other.
-//פרופ וולף
+
 //BFS (button)
