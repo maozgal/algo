@@ -8,6 +8,9 @@
 
 </body>
 <script>
+
+
+
 function Point(x, y) {
   this.x = x;
   this.y = y;
@@ -55,7 +58,26 @@ function start() {
       }
       var newY = lineAngle *(newX - edgePoint1.x) + edgePoint1.y
 
-      drawArrow(edgePoint1.x,edgePoint1.y,newX,newY,'black',1);
+
+      var circle = {
+          radius : VERTEXES_SIZE,
+          center : edgePoint2,
+      }
+      var line = {
+    p1 : edgePoint1,
+    p2 : edgePoint2,
+    }
+console.log(inteceptCircleLineSeg(circle,line));
+      //circle
+      //(x-edgePoint2.x)^2 + (y-edgePoint2.y)^2 = VERTEXES_SIZE^2
+      //line
+      // y = (x-edgePoint2.x)*lineAngle + edgePoint2.y
+
+
+
+      // drawArrow(edgePoint1.x,edgePoint1.y,newX,newY,'black',1);
+      p = inteceptCircleLineSeg(circle,line)[0]
+      drawArrow(edgePoint1.x,edgePoint1.y,p.x,p.y,'black',1);
     }
 
 
@@ -120,6 +142,38 @@ function start() {
 
   }
 
+  function inteceptCircleLineSeg(circle, line){
+      var a, b, c, d, u1, u2, ret, retP1, retP2, v1, v2;
+      v1 = {};
+      v2 = {};
+      v1.x = line.p2.x - line.p1.x;
+      v1.y = line.p2.y - line.p1.y;
+      v2.x = line.p1.x - circle.center.x;
+      v2.y = line.p1.y - circle.center.y;
+      b = (v1.x * v2.x + v1.y * v2.y);
+      c = 2 * (v1.x * v1.x + v1.y * v1.y);
+      b *= -2;
+      d = Math.sqrt(b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - circle.radius * circle.radius));
+      if(isNaN(d)){ // no intercept
+          return [];
+      }
+      u1 = (b - d) / c;  // these represent the unit distance of point one and two on the line
+      u2 = (b + d) / c;
+      retP1 = {};   // return points
+      retP2 = {}
+      ret = []; // return array
+      if(u1 <= 1 && u1 >= 0){  // add point if on the line segment
+          retP1.x = line.p1.x + v1.x * u1;
+          retP1.y = line.p1.y + v1.y * u1;
+          ret[0] = retP1;
+      }
+      if(u2 <= 1 && u2 >= 0){  // second add point if on the line segment
+          retP2.x = line.p1.x + v1.x * u2;
+          retP2.y = line.p1.y + v1.y * u2;
+          ret[ret.length] = retP2;
+      }
+      return ret;
+  }
 
   start();
 
